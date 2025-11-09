@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import Solar1 from '../assets/Solar1.png';
+import Solar1 from '../assets/images/Solar1.png';
 import Solar2 from '../assets/images/Solar2.jpg';
 
 const BannerCarousel = () => {
@@ -82,18 +82,10 @@ const BannerCarousel = () => {
           width: '100%',
           height: '110%',
           objectFit: 'cover',
-          transform: 'scale(1.05) translateY(5%)'
+          transform: 'scale(1.05) translateY(5%)',
+          filter: 'brightness(0.5)'
         }} />
         {/* Gradient Overlay */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%)',
-          zIndex: 1
-        }} />
         {/* Content */}
         <div style={{
           position: 'relative',
@@ -122,22 +114,30 @@ const BannerCarousel = () => {
           {/* Banner Content */}
           {bannerContent[currentIndex].showContent && (
             <div style={{ 
-              maxWidth: '600px',
-              color: 'white',
-              textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+              maxWidth: '800px',
+              color: '#ffffff',
+              textShadow: '0 2px 15px rgba(0,0,0,0.9)',
+              marginBottom: '20px',
+              fontWeight: '900',
+              lineHeight: '1.3',
+              filter: 'brightness(1) contrast(1.2)'
             }}>
               <h1 style={{ 
-                fontSize: 'clamp(28px, 5vw, 48px)', 
-                marginBottom: '16px',
-                lineHeight: '1.2',
-                animation: 'fadeIn 0.8s ease-out'
+                fontSize: 'clamp(32px, 5.5vw, 52px)', 
+                marginBottom: '20px',
+                lineHeight: '1.3',
+                fontWeight: '900',
+                animation: 'fadeIn 0.8s ease-out',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
               }}>
                 {bannerContent[currentIndex].title}
               </h1>
               <p style={{ 
-                fontSize: 'clamp(16px, 2vw, 20px)',
+                fontSize: 'clamp(18px, 2.2vw, 22px)',
                 marginBottom: '24px',
-                lineHeight: 1.5,
+                lineHeight: 1.6,
+                fontWeight: '500',
+                textShadow: '1px 1px 3px rgba(0,0,0,0.8)',
                 animation: 'fadeIn 1s ease-out'
               }}>
                 {bannerContent[currentIndex].description}
@@ -149,19 +149,21 @@ const BannerCarousel = () => {
                   padding: '12px 28px',
                   fontSize: '16px',
                   fontWeight: 600,
-                  backgroundColor: '#22c55e',
-                  color: 'white',
-                  border: 'none',
+                  backgroundColor: '#ffffff',
+                  color: '#333333',
+                  border: '2px solid #ffffff',
                   borderRadius: '6px',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   textDecoration: 'none',
                   display: 'inline-block',
                   animation: 'fadeIn 1.2s ease-out',
                   ':hover': {
-                    backgroundColor: '#16a34a',
+                    backgroundColor: '#E10210',
+                    color: '#ffffff',
+                    borderColor: '#E10210',
                     transform: 'translateY(-2px)',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                    boxShadow: '0 4px 15px rgba(225, 2, 16, 0.3)'
                   }
                 }}
               >
@@ -201,55 +203,7 @@ const BannerCarousel = () => {
         ))}
       </div>
 
-      {/* Navigation Arrows */}
-      <button
-        onClick={() => setCurrentIndex((prev) => (prev - 1 + bannerContent.length) % bannerContent.length)}
-        style={{
-          position: 'absolute',
-          left: '20px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          background: 'rgba(0,0,0,0.3)',
-          color: 'white',
-          border: 'none',
-          borderRadius: '50%',
-          width: '40px',
-          height: '40px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          fontSize: '20px',
-          zIndex: 2
-        }}
-        aria-label="Previous slide"
-      >
-        ‹
-      </button>
-      <button
-        onClick={() => setCurrentIndex((prev) => (prev + 1) % bannerContent.length)}
-        style={{
-          position: 'absolute',
-          right: '20px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          background: 'rgba(0,0,0,0.3)',
-          color: 'white',
-          border: 'none',
-          borderRadius: '50%',
-          width: '40px',
-          height: '40px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          fontSize: '20px',
-          zIndex: 2
-        }}
-        aria-label="Next slide"
-      >
-        ›
-      </button>
+      {/* Navigation Arrows Removed */}
     </div>
   );
 };
@@ -2705,218 +2659,164 @@ function Home() {
         </div>
       </section>
       
-      {/* 3. FAQ Section */}
+      {/* 4. FAQ Section */}
       <section style={{
         padding: '80px 0',
-        background: '#ffffff'
+        backgroundColor: '#ffffff',
+        position: 'relative'
       }}>
-        <div style={containerStyle}>
+        <div style={{
+          ...containerStyle,
+          position: 'relative',
+          zIndex: 2
+        }}>
           <div style={{
             textAlign: 'center',
-            maxWidth: '700px',
-            margin: '0 auto 60px'
+            marginBottom: '50px'
           }}>
             <h2 style={{
               fontSize: 'clamp(28px, 5vw, 42px)',
               fontWeight: 800,
               color: '#0f172a',
-              marginBottom: '16px'
+              margin: '0 0 16px'
             }}>
               Frequently Asked Questions
             </h2>
             <p style={{
               fontSize: '18px',
               color: '#4b5563',
-              lineHeight: '1.7',
-              margin: 0
+              maxWidth: '700px',
+              margin: '0 auto',
+              lineHeight: '1.7'
             }}>
-              Find answers to common questions about solar panel installation, savings, and maintenance.
+              Find answers to common questions about our solar solutions and services.
             </p>
           </div>
           
-          {/* FAQ Items */}
           <div style={{
             maxWidth: '800px',
-            margin: '0 auto'
+            margin: '0 auto',
+            padding: '0 20px'
           }}>
             {[
               {
-                question: 'How much does a solar panel system cost?',
-                answer: 'Residential systems cost ₹45,000-60,000 per kW. Subsidies can reduce this by 20-40%.',
-                icon: '💰',
-                id: 'faq1'
+                question: 'How much can I save with solar panels?',
+                answer: 'Most homeowners save between 50-90% on their electricity bills after installing solar panels. The exact savings depend on your energy usage, location, and the size of your solar system.'
               },
               {
                 question: 'How long does installation take?',
-                answer: 'Installation takes 3-7 days after permits. Total process: 4-8 weeks.',
-                icon: '⏱️',
-                id: 'faq2'
+                answer: 'The installation process typically takes 1-3 days, depending on the size of your system. However, the entire process from initial consultation to activation usually takes 4-8 weeks, including permitting and inspections.'
               },
               {
-                question: 'Do solar panels work during power cuts?',
-                answer: 'Only with battery backup. We can help you choose the right solution.',
-                icon: '🔌',
-                id: 'faq3'
+                question: 'Do solar panels work during power outages?',
+                answer: 'Standard grid-tied solar systems automatically shut off during a power outage for safety reasons. However, with a battery storage system, you can have backup power during outages.'
               },
               {
-                question: 'What maintenance is required?',
-                answer: 'Minimal maintenance needed. Clean 2-4 times yearly. 25+ year lifespan.',
-                icon: '🔧',
-                id: 'faq4'
+                question: 'What maintenance do solar panels require?',
+                answer: 'Solar panels require minimal maintenance. We recommend cleaning them 2-4 times a year and having a professional inspection every 2-3 years to ensure optimal performance.'
               },
               {
-                question: 'Can I go completely off-grid?',
-                answer: 'Yes, with battery storage. We design systems for all needs and budgets.',
-                icon: '🏠',
-                id: 'faq5'
+                question: 'What is the lifespan of a solar panel system?',
+                answer: 'Most solar panels come with a 25-30 year performance warranty and can last even longer. The system will continue to produce electricity after the warranty period, though at a slightly reduced efficiency.'
               }
-            ].map((faq) => {
-              const isOpen = openFaq === faq.id;
-              return (
-                <div key={faq.id} style={{
-                  marginBottom: '15px',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '12px',
+            ].map((faq, index) => (
+              <div key={index} style={{
+                marginBottom: '15px',
+                border: '1px solid #e2e8f0',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                transition: 'all 0.3s ease',
+                ':hover': {
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+                }
+              }}>
+                <button 
+                  onClick={() => toggleFaq(`faq${index}`)}
+                  style={{
+                    width: '100%',
+                    textAlign: 'left',
+                    background: openFaq === `faq${index}` ? '#f8fafc' : '#fff',
+                    border: 'none',
+                    padding: '18px 25px',
+                    fontSize: '17px',
+                    fontWeight: 600,
+                    color: '#0f172a',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {faq.question}
+                  <span style={{
+                    fontSize: '20px',
+                    transition: 'transform 0.3s ease',
+                    color: '#64748b',
+                    transform: openFaq === `faq${index}` ? 'rotate(45deg)' : 'rotate(0)'
+                  }}>
+                    +
+                  </span>
+                </button>
+                <div style={{
+                  maxHeight: openFaq === `faq${index}` ? '200px' : '0',
                   overflow: 'hidden',
                   transition: 'all 0.3s ease',
-                  ':hover': {
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
-                  }
+                  padding: openFaq === `faq${index}` ? '0 25px 18px' : '0 25px',
+                  borderTop: openFaq === `faq${index}` ? '1px solid #f1f5f9' : 'none',
+                  background: openFaq === `faq${index}` ? '#f8fafc' : 'transparent'
                 }}>
-                  <button 
-                    onClick={() => toggleFaq(faq.id)}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      background: isOpen ? '#f8fafc' : '#fff',
-                      border: 'none',
-                      padding: '18px 25px',
-                      fontSize: '17px',
-                      fontWeight: 600,
-                      color: '#0f172a',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      transition: 'all 0.2s ease',
-                      ':hover': {
-                        background: '#f8fafc'
-                      }
-                    }}
-                  >
-                    <span style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      textAlign: 'left'
-                    }}>
-                      <span style={{
-                        fontSize: '20px',
-                        opacity: 0.8,
-                        flexShrink: 0
-                      }}>{faq.icon}</span>
-                      {faq.question}
-                    </span>
-                    <span style={{
-                      fontSize: '20px',
-                      transition: 'transform 0.3s ease',
-                      color: '#64748b',
-                      transform: isOpen ? 'rotate(45deg)' : 'rotate(0)'
-                    }}>
-                      +
-                    </span>
-                  </button>
                   <div style={{
-                    maxHeight: isOpen ? '100px' : '0',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s ease',
-                    opacity: isOpen ? 1 : 0.8,
-                    padding: isOpen ? '0 25px 18px' : '0 25px',
-                    borderTop: isOpen ? '1px solid #f1f5f9' : 'none',
-                    background: isOpen ? '#f8fafc' : 'transparent'
+                    color: '#475569',
+                    lineHeight: '1.7',
+                    fontSize: '15px',
+                    paddingTop: '12px'
                   }}>
-                    <div style={{
-                      color: '#475569',
-                      lineHeight: '1.6',
-                      fontSize: '15px',
-                      padding: '12px 0 0',
-                      maxHeight: '3.2em',
-                      overflow: 'hidden',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical'
-                    }}>
-                      {faq.answer}
-                    </div>
+                    {faq.answer}
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
             
             <div style={{
               textAlign: 'center',
-              marginTop: '40px'
+              marginTop: '50px'
             }}>
               <p style={{
-                fontSize: '16px',
-                color: '#64748b',
-                marginBottom: '20px'
+                fontSize: '18px',
+                color: '#4b5563',
+                margin: '0 0 20px'
               }}>
-                Still have questions?
+                Still have questions? Our solar experts are here to help!
               </p>
-              <button style={{
-                background: '#0ea5e9',
-                color: 'white',
-                border: 'none',
-                padding: '12px 28px',
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                ':hover': {
-                  background: '#0284c7',
-                  transform: 'translateY(-2px)'
-                }
-              }}>
-                Contact Our Experts
-              </button>
+              <NavLink 
+                to="/contact"
+                style={{
+                  background: 'linear-gradient(90deg, #0ea5e9, #3b82f6)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '14px 32px',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  textDecoration: 'none',
+                  display: 'inline-block',
+                  transition: 'all 0.3s ease',
+                  ':hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 10px 20px rgba(14, 165, 233, 0.3)'
+                  }
+                }}
+              >
+                Contact Us
+              </NavLink>
             </div>
-          </div>
-          
-          <div style={{
-            textAlign: 'center',
-            marginTop: '50px'
-          }}>
-            <p style={{
-              fontSize: '18px',
-              color: '#4b5563',
-              margin: '0 0 20px'
-            }}>
-              Still have questions? Our solar experts are here to help!
-            </p>
-            <button style={{
-              background: 'linear-gradient(90deg, #0ea5e9, #3b82f6)',
-              color: 'white',
-              border: 'none',
-              padding: '14px 32px',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              ':hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: '0 10px 20px rgba(14, 165, 233, 0.3)'
-              }
-            }}>
-              Contact Our Experts
-            </button>
           </div>
         </div>
       </section>
       
-      {/* 4. Testimonials Section */}
+      {/* 5. Testimonials Section */}
       <section style={{
         padding: '80px 0',
         background: '#f8fafc',
