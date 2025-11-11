@@ -1,6 +1,30 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function About() {
+  const solutionsRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    // Check if we should scroll to solutions
+    const shouldScroll = sessionStorage.getItem('scrollToSolutions');
+    
+    if (shouldScroll && solutionsRef.current) {
+      // Scroll to the solutions section
+      setTimeout(() => {
+        solutionsRef.current.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+        // Reset the flag
+        sessionStorage.removeItem('scrollToSolutions');
+      }, 100); // Small delay to ensure the page has rendered
+    }
+  }, [location]);
+
+  const scrollToSolutions = () => {
+    solutionsRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
   return (
     <section id="about" style={{ 
       padding: '60px 20px 80px',
@@ -63,51 +87,7 @@ function About() {
           SolarX is revolutionizing India's energy landscape with cutting-edge solar solutions that are sustainable, reliable, and tailored to your needs. Join thousands of satisfied customers who've made the switch to clean energy.
         </p>
         
-        <div style={{
-          display: 'flex',
-          gap: '16px',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          position: 'relative',
-          zIndex: 2
-        }}>
-          <button style={{
-            padding: '14px 32px',
-            background: '#3b82f6',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '1rem',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.3), 0 2px 4px -1px rgba(59, 130, 246, 0.1)',
-            ':hover': {
-              transform: 'translateY(-2px)',
-              boxShadow: '0 10px 15px -3px rgba(59, 130, 246, 0.3), 0 4px 6px -2px rgba(59, 130, 246, 0.2)',
-              background: '#2563eb'
-            }
-          }}>
-            Get Free Consultation
-          </button>
-          <button style={{
-            padding: '14px 32px',
-            background: 'white',
-            color: '#3b82f6',
-            border: '2px solid #3b82f6',
-            borderRadius: '8px',
-            fontSize: '1rem',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            ':hover': {
-              background: '#f8fafc',
-              transform: 'translateY(-2px)'
-            }
-          }}>
-            Learn More
-          </button>
-        </div>
+        
         
         <div style={{
           display: 'flex',
@@ -264,7 +244,10 @@ function About() {
 
 
       {/* Our Services */}
-      <div style={{ marginBottom: '60px' }}>
+      <div ref={solutionsRef} id="solutions" style={{ 
+        marginBottom: '60px',
+        scrollMarginTop: '80px' // Adjust this value based on your header height
+      }}>
         <h2 style={{ 
           color: '#0b1a24',
           marginBottom: '25px',
@@ -331,23 +314,26 @@ function About() {
                     <li key={i} style={{ marginBottom: '8px' }}>{feature}</li>
                   ))}
                 </ul>
-                <button style={{
-                  display: 'block',
-                  width: '100%',
-                  marginTop: '20px',
-                  padding: '12px',
-                  background: '#0284c7',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  transition: 'all 0.3s ease',
-                  ':hover': {
-                    background:'#0284c7',
-                    transform: 'translateY(-2px)'
-                  }
-                }}>
+                <button 
+                  onClick={scrollToSolutions}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    marginTop: '20px',
+                    padding: '12px',
+                    background: '#0284c7',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    transition: 'all 0.3s ease',
+                    ':hover': {
+                      background:'#0284c7',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}>
+                  View Solution
                   Learn More
                 </button>
               </div>

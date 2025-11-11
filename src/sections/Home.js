@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Solar1 from '../assets/images/Solar1.png';
 import Solar2 from '../assets/images/Solar2.jpg';
+import FloatingWhatsApp from '../components/FloatingWhatsApp';
 
 const BannerCarousel = () => {
   const bannerContent = [
@@ -209,9 +210,58 @@ const BannerCarousel = () => {
 };
 
 function Home() {
+  // Solar Calculator State
   const [bill, setBill] = useState('');
+  const [roofArea, setRoofArea] = useState('');
   const [tariff, setTariff] = useState('9');
   const [calc, setCalc] = useState(null);
+  
+  // Calculate solar savings
+  const calculateSavings = () => {
+    if (!bill || !roofArea) return;
+    
+    const monthlyBill = parseFloat(bill);
+    const area = parseFloat(roofArea);
+    
+    // Calculate system size (1 kW requires ~100 sq.ft of roof space)
+    const maxSystemSizeKW = Math.min(area / 100, 100); // Cap at 100kW
+    
+    // Calculate monthly units (assuming average tariff of ₹9/unit if not provided)
+    const monthlyUnits = monthlyBill / (tariff || 9);
+    
+    // Calculate required system size (1 kW produces ~120 units/month)
+    const requiredSystemSizeKW = Math.min(monthlyUnits / 120, maxSystemSizeKW);
+    
+    // Calculate savings (90% of current bill)
+    const monthlySavings = Math.round(monthlyBill * 0.9);
+    const annualSavings = monthlySavings * 12;
+    
+    // Calculate system cost (₹50,000 per kW)
+    const systemCost = Math.round(requiredSystemSizeKW * 50000);
+    
+    // Calculate payback period in years
+    const paybackYears = (systemCost / annualSavings).toFixed(1);
+    
+    setCalc({
+      systemSize: requiredSystemSizeKW.toFixed(1),
+      monthlySavings,
+      annualSavings,
+      systemCost,
+      paybackYears,
+      monthlyUnits: Math.round(monthlyUnits)
+    });
+  };
+  
+  // Reset calculation when inputs change
+  const handleBillChange = (e) => {
+    setBill(e.target.value);
+    setCalc(null);
+  };
+  
+  const handleRoofAreaChange = (e) => {
+    setRoofArea(e.target.value);
+    setCalc(null);
+  };
   const [counts, setCounts] = useState({ mwp: 0, sites: 0, co2: 0, units: 0 });
   const testimonials = useMemo(
     () => [
@@ -475,18 +525,55 @@ function Home() {
               Cut your electricity bills by up to 70% with high‑efficiency panels, expert design and
               end‑to‑end support—from survey to installation and maintenance.
             </p>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <NavLink to="/contact" className="btn btn-primary" aria-label="Book a free site survey">
+            <div style={{ 
+              display: 'flex', 
+              gap: 12, 
+              flexWrap: 'wrap',
+              position: 'relative',
+              zIndex: 2
+            }}>
+              <NavLink 
+                to="/contact" 
+                className="btn btn-primary" 
+                aria-label="Book a free site survey"
+                style={{
+                  position: 'relative',
+                  zIndex: 2,
+                  padding: '12px 24px',
+                  textDecoration: 'none',
+                  display: 'inline-block',
+                  transition: 'all 0.3s ease',
+                  ':hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                  }
+                }}
+              >
                 Book a Free Site Survey
               </NavLink>
               <NavLink
-                to="/solutions"
+                to="/about"
                 className="btn btn-ghost"
                 aria-label="View solar solutions"
                 style={{
+                  position: 'relative',
+                  zIndex: 2,
                   background: 'transparent',
                   border: '1px solid rgba(255,255,255,0.4)',
-                  color: '#fff'
+                  color: '#fff',
+                  padding: '12px 24px',
+                  textDecoration: 'none',
+                  display: 'inline-block',
+                  transition: 'all 0.3s ease',
+                  ':hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  }
+                }}
+                onClick={(e) => {
+                  // Store that we want to scroll to solutions
+                  sessionStorage.setItem('scrollToSolutions', 'true');
                 }}
               >
                 View Solutions
@@ -1384,19 +1471,7 @@ function Home() {
               }}>
                 With over 10 years in the solar industry, we've successfully completed 200+ projects with a total installed capacity of 5+ MWp.
               </p>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                color: '#0ea5e9',
-                fontWeight: 600,
-                fontSize: '15px',
-                marginTop: 'auto',
-                paddingTop: '15px',
-                borderTop: '1px dashed #e2e8f0'
-              }}>
-                Learn more
-                <span style={{ marginLeft: '8px', transition: 'transform 0.3s' }}>→</span>
-              </div>
+              
             </div>
 
             {/* Feature 2 - Highlighted */}
@@ -1482,19 +1557,7 @@ function Home() {
               }}>
                 From consultation to installation and maintenance, we handle everything with a single point of contact for your convenience.
               </p>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                color: '#22c55e',
-                fontWeight: 600,
-                fontSize: '15px',
-                marginTop: 'auto',
-                paddingTop: '15px',
-                borderTop: '1px dashed rgba(255,255,255,0.1)'
-              }}>
-                Get started
-                <span style={{ marginLeft: '8px', transition: 'transform 0.3s' }}>→</span>
-              </div>
+              
             </div>
 
             {/* Feature 3 */}
@@ -1566,19 +1629,7 @@ function Home() {
               }}>
                 Enjoy 24/7 monitoring, maintenance services, and comprehensive warranties on all our installations.
               </p>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                color: '#22c55e',
-                fontWeight: 600,
-                fontSize: '15px',
-                marginTop: 'auto',
-                paddingTop: '15px',
-                borderTop: '1px dashed #e2e8f0'
-              }}>
-                Learn more
-                <span style={{ marginLeft: '8px', transition: 'transform 0.3s' }}>→</span>
-              </div>
+              
             </div>
           </div>
 
@@ -2072,9 +2123,9 @@ function Home() {
       
       {/* 1. Solar Panel Types Section */}
       <section style={{
-        padding: '80px 0',
+        padding: '40px 0',
         background: '#f8fafc',
-        marginTop: '80px'
+        marginTop: '10px'
       }}>
         <div style={containerStyle}>
           <div style={{
@@ -2086,7 +2137,7 @@ function Home() {
               fontSize: 'clamp(28px, 5vw, 42px)',
               fontWeight: 800,
               color: '#0f172a',
-              marginBottom: '16px'
+              marginBottom: '8px'
             }}>
               Types of Solar Panels We Offer
             </h2>
@@ -2230,7 +2281,7 @@ function Home() {
       </section>
       
       {/* 4-Panel Feature Section - Full Width */}
-      <section style={{
+      {/* <section style={{
         padding: '80px 0',
         background: '#ffffff',
         width: '100%',
@@ -2389,7 +2440,7 @@ function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
       
       {/* 2. Solar Calculator Section */}
       <section style={{
@@ -2398,7 +2449,7 @@ function Home() {
         color: 'white',
         position: 'relative',
         overflow: 'hidden'
-      }}>
+      }} id="solar-calculator">
         <div style={{
           position: 'absolute',
           top: 0,
@@ -2458,6 +2509,8 @@ function Home() {
                 </label>
                 <input 
                   type="number" 
+                  value={bill}
+                  onChange={handleBillChange}
                   placeholder="e.g. 5000" 
                   style={{
                     width: '100%',
@@ -2490,6 +2543,8 @@ function Home() {
                 </label>
                 <input 
                   type="number" 
+                  value={roofArea}
+                  onChange={handleRoofAreaChange}
                   placeholder="e.g. 500" 
                   style={{
                     width: '100%',
@@ -2511,22 +2566,29 @@ function Home() {
                 />
               </div>
             </div>
-            <button style={{
-              background: 'linear-gradient(90deg, #22c55e, #16a34a)',
-              color: 'white',
-              border: 'none',
-              padding: '14px 28px',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              ':hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: '0 10px 20px rgba(34, 197, 94, 0.3)'
-              }
-            }}>
-              Calculate Savings
+            <button 
+              onClick={calculateSavings}
+              disabled={!bill || !roofArea}
+              style={{
+                background: !bill || !roofArea 
+                  ? 'linear-gradient(90deg, #64748b, #475569)' 
+                  : 'linear-gradient(90deg, #22c55e, #16a34a)',
+                color: 'white',
+                border: 'none',
+                padding: '14px 28px',
+                borderRadius: '8px',
+                fontSize: '16px',
+                fontWeight: 600,
+                cursor: !bill || !roofArea ? 'not-allowed' : 'pointer',
+                transition: 'all 0.3s ease',
+                opacity: !bill || !roofArea ? 0.7 : 1,
+                ':hover': !bill || !roofArea ? {} : {
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 10px 20px rgba(34, 197, 94, 0.3)'
+                }
+              }}
+            >
+              {!bill || !roofArea ? 'Enter details to calculate' : 'Calculate Savings'}
             </button>
           </div>
           
@@ -2580,7 +2642,7 @@ function Home() {
                   fontWeight: 600,
                   fontSize: '16px',
                   color: 'white'
-                }}>5 kW</span>
+                }}>{calc ? `${calc.systemSize} kW` : '--'}</span>
               </div>
               <div style={{
                 display: 'flex',
@@ -2597,7 +2659,7 @@ function Home() {
                   fontWeight: 600,
                   fontSize: '16px',
                   color: '#22c55e'
-                }}>₹4,200</span>
+                }}>{calc ? `₹${calc.monthlySavings?.toLocaleString()}` : '--'}</span>
               </div>
               <div style={{
                 display: 'flex',
@@ -2612,7 +2674,7 @@ function Home() {
                   fontWeight: 600,
                   fontSize: '16px',
                   color: 'white'
-                }}>₹50,400</span>
+                }}>{calc ? `₹${calc.annualSavings?.toLocaleString()}` : '--'}</span>
               </div>
             </div>
             <div style={{
@@ -2636,7 +2698,7 @@ function Home() {
                 color: '#22c55e',
                 fontSize: '18px'
               }}>
-                💡
+                {calc ? '💰' : '💡'}
               </div>
               <div>
                 <div style={{
@@ -2644,14 +2706,21 @@ function Home() {
                   marginBottom: '4px',
                   color: '#22c55e'
                 }}>
-                  Good News!
+                  {calc ? 'Great News!' : 'Good News!'}
                 </div>
                 <div style={{
                   fontSize: '14px',
                   color: '#86efac',
                   lineHeight: '1.5'
                 }}>
-                  You could save up to 90% on your electricity bills with solar power.
+                  {calc 
+                    ? `You could save ₹${calc.monthlySavings?.toLocaleString()} per month (${(calc.annualSavings / (calc.monthlySavings * 12) * 100).toFixed(0)}% of your bill).`
+                    : 'Enter your details to see potential savings with solar power.'}
+                  {calc?.paybackYears && (
+                    <div style={{ marginTop: '4px' }}>
+                      Payback period: ~{calc.paybackYears} years
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -3216,6 +3285,9 @@ function Home() {
           </div>
         </div>
       </section>
+      
+      {/* WhatsApp Floating Button */}
+      <FloatingWhatsApp />
       
     </section>
   );
